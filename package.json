@@ -1,0 +1,41 @@
+{
+  "name": "@cookiemunch/consent-shim",
+  "version": "0.1.0",
+  "description": "window.__fdConsent on any page: one consent API for embeds over Cookiebot, OneTrust or no consent tool",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./fd-consent-shim.js": "./dist/fd-consent-shim.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cookie-Munch/consent-shim.git"
+  },
+  "homepage": "https://cookiemunch.net/docs/consent-api",
+  "bugs": {
+    "url": "https://github.com/Cookie-Munch/consent-shim/issues"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.0",
+    "happy-dom": "15.11.7",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9"
+  }
+}
