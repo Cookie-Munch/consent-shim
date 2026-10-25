@@ -20,9 +20,13 @@ type Cats = Record<string, boolean>;
 type Cb = (s: unknown, cause: string) => void;
 
 ((w: Window & Record<string, any>) => {
+  // window.__consent is the name; __fdConsent is an alias of the same object. An embed may have queued on either.
+  const ours = (o: any): boolean => !!o && typeof o == 'object' && ('q' in o || 'version' in o);
   const fd = w.__fdConsent;
-  if (fd && fd.version) return; // a CMP already set the real one
-  const queued: unknown[][] = (fd && fd.q) || [];
+  const alt = ours(w.__consent) ? w.__consent : undefined;
+  if ((fd && fd.version) || (alt && alt.version)) return; // a CMP already set the real one
+  const qOf = (o: any): unknown[][] => (o && Array.isArray(o.q) ? o.q : []);
+  const queued: unknown[][] = [...qOf(fd), ...(alt && alt !== fd ? qOf(alt) : [])];
   const map: Record<string, string> = { support_chat: 'preferences', referrals: 'marketing', product_analytics: 'statistics', ...(w.fdConsentShim && w.fdConsentShim.map) };
   const std = ['preferences', 'statistics', 'marketing'];
   const gpc = (): boolean => !!(w.navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl;
@@ -116,5 +120,6 @@ type Cb = (s: unknown, cause: string) => void;
   };
   api.q = { push: (...calls: unknown[][]) => (calls.forEach(run), 0) };
   w.__fdConsent = api;
+  if (w.__consent === undefined || alt) w.__consent = api;
   queued.forEach(run);
 })(window as never);

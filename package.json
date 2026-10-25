@@ -1,6 +1,6 @@
 {
   "name": "@cookiemunch/consent-shim",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "window.__fdConsent on any page: one consent API for embeds over Cookiebot, OneTrust or no consent tool",
   "license": "MIT",
   "type": "module",

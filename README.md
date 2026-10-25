@@ -1,13 +1,13 @@
 # @cookiemunch/consent-shim
 
-`window.__fdConsent` on any page: one small consent API that a chat widget, a referral snippet or an
+`window.__consent` (also `window.__fdConsent`, the same object) on any page: one small consent API that a chat widget, a referral snippet or an
 analytics tag can code against, whatever consent tool the page runs. Cookie Munch sets it natively;
 on a page running Cookiebot, OneTrust or no consent tool, this shim sets the same object.
 
 ```ts
 import '@cookiemunch/consent-shim';
 
-const fd = window.__fdConsent;
+const fd = window.__consent;
 fd.has('referrals');                       // true, false, or null before the visitor decides
 fd.on('change', (state) => { /* … */ });
 await fd.request('support_chat');          // the mapped category's state (the shim cannot prompt)

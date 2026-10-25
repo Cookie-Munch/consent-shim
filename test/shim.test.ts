@@ -14,7 +14,7 @@ async function loadShim(): Promise<any> {
 }
 
 beforeEach(() => {
-  for (const k of ['__fdConsent', 'Cookiebot', 'OnetrustActiveGroups', 'fdConsentShim', 'CookieMunch']) delete w[k];
+  for (const k of ['__consent', '__fdConsent', 'Cookiebot', 'OnetrustActiveGroups', 'fdConsentShim', 'CookieMunch']) delete w[k];
   document.cookie = 'OptanonAlertBoxClosed=; max-age=0; path=/';
   Object.defineProperty(navigator, 'globalPrivacyControl', { value: undefined, configurable: true });
 });
@@ -98,5 +98,24 @@ describe('the queue and the map', () => {
     w.__fdConsent = real;
     await loadShim();
     expect(w.__fdConsent).toBe(real);
+  });
+});
+
+describe('window.__consent, with __fdConsent as an alias', () => {
+  it('sets both names to one object and replays what was queued on either', async () => {
+    const seen: string[] = [];
+    w.__consent = { q: [['ready', () => seen.push('consent')]] };
+    const fd = await loadShim();
+    await tick();
+    expect(w.__consent).toBe(fd);
+    expect(seen).toEqual(['consent']);
+  });
+
+  it('leaves a __consent another tool owns alone', async () => {
+    const theirs = { mine: true };
+    w.__consent = theirs;
+    await loadShim();
+    expect(w.__consent).toBe(theirs);
+    expect(w.__fdConsent.version).toBe(1);
   });
 });
