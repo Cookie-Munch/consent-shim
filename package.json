@@ -20,7 +20,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.json --emitDeclarationOnly --declaration",
     "test": "vitest run"
   },
   "repository": {
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@types/node": "22.20.0",
-    "happy-dom": "15.11.7",
+    "happy-dom": "21.0.4",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
     "vitest": "2.1.9"
