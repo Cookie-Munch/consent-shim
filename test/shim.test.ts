@@ -15,7 +15,9 @@ async function loadShim(): Promise<any> {
 
 beforeEach(() => {
   for (const k of ['__consent', '__fdConsent', 'Cookiebot', 'OnetrustActiveGroups', 'fdConsentShim', 'CookieMunch']) delete w[k];
-  document.cookie = 'OptanonAlertBoxClosed=; max-age=0; path=/';
+  // A date in the past, not max-age=0: happy-dom expires a cookie only once `expires < Date.now()`, so max-age=0
+  // read back within the same millisecond leaves an empty `OptanonAlertBoxClosed=` that reads as a closed banner.
+  document.cookie = 'OptanonAlertBoxClosed=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
   Object.defineProperty(navigator, 'globalPrivacyControl', { value: undefined, configurable: true });
 });
 
